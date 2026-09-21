@@ -1,0 +1,6 @@
+{
+  "name": "EXREA – Esperienze Digitali Immersive & Configuratori 3D B2B",
+  "description": "Landing page di conversione per campagne paid EXREA: configuratori 3D real-time, VR, AR e video 360° per vendere, formare, spiegare e coinvolgere.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
