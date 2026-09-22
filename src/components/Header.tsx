@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Calendar, Menu, X, ArrowRight, Sparkles } from 'lucide-react';
+import { motion } from 'motion/react';
+import { Calendar, Menu, X, ArrowRight, Sparkles, Zap, Building2 } from 'lucide-react';
 import { CampaignVertical } from '../types';
 
 interface HeaderProps {
   currentVertical?: CampaignVertical;
   onSelectVertical?: (vertical: CampaignVertical) => void;
   onBookDemoClick: () => void;
+  landingStyle?: 'direct_response' | 'corporate';
+  onChangeLandingStyle?: (style: 'direct_response' | 'corporate') => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onBookDemoClick,
+  landingStyle = 'direct_response',
+  onChangeLandingStyle,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -23,18 +28,28 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const scrollToTop = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <header className="sticky top-0 z-40 bg-[#0c0f17]/90 backdrop-blur-md border-b border-slate-800/80 transition-all">
+    <header className="sticky top-0 z-40 bg-[#08090d]/95 backdrop-blur-md border-b border-slate-800/80 transition-all">
       {/* Main Header Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-18">
           {/* Logo EXREA */}
           <div className="flex items-center gap-3">
-            <a href="#" className="flex items-center gap-2.5 focus:outline-none" aria-label="EXREA Home">
+            <a
+              href="#"
+              onClick={scrollToTop}
+              className="flex items-center gap-2.5 focus:outline-none group"
+              aria-label="EXREA Home"
+            >
               <img
                 src="/images/exrea-logo.png"
                 alt="EXREA"
-                className="h-8 md:h-9 w-auto object-contain brightness-110"
+                className="h-8 md:h-9 w-auto object-contain brightness-110 group-hover:scale-105 transition-transform duration-300"
                 onError={(e) => {
                   // Fallback to high-contrast svg text if image blocked
                   const target = e.currentTarget;
@@ -50,34 +65,91 @@ export const Header: React.FC<HeaderProps> = ({
             </a>
           </div>
 
+          {/* Graphic Style Switcher Toggle with Smooth Pill Animation */}
+          {onChangeLandingStyle && (
+            <div className="hidden md:flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800/90 text-xs relative">
+              <button
+                type="button"
+                onClick={() => {
+                  onChangeLandingStyle('direct_response');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-colors duration-200 ${
+                  landingStyle === 'direct_response'
+                    ? 'text-cyan-300'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {landingStyle === 'direct_response' && (
+                  <motion.div
+                    layoutId="header-active-style"
+                    className="absolute inset-0 bg-cyan-500/20 border border-cyan-500/60 rounded-lg shadow-sm -z-10"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <Zap className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Stile Direct Response</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onChangeLandingStyle('corporate');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-colors duration-200 ${
+                  landingStyle === 'corporate'
+                    ? 'text-cyan-300'
+                    : 'text-slate-400 hover:text-slate-200'
+                }`}
+              >
+                {landingStyle === 'corporate' && (
+                  <motion.div
+                    layoutId="header-active-style"
+                    className="absolute inset-0 bg-cyan-500/20 border border-cyan-500/60 rounded-lg shadow-sm -z-10"
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
+                  />
+                )}
+                <Building2 className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Stile B2B Corporate</span>
+              </button>
+            </div>
+          )}
+
           {/* Reduced Navigation Menu as mandated in Section 06 */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-3 text-sm font-medium text-slate-300">
-            <button
-              onClick={() => scrollToSection('how-it-works')}
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
-            >
-              Come funziona
-            </button>
-            <button
-              onClick={() => scrollToSection('demo-section')}
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Demo</span>
-            </button>
-            <button
-              onClick={() => scrollToSection('case-studies')}
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
-            >
-              Casi reali
-            </button>
-            <button
-              onClick={() => scrollToSection('faq')}
-              className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
-            >
-              FAQ
-            </button>
-          </nav>
+          {landingStyle === 'corporate' ? (
+            <nav className="hidden lg:flex items-center space-x-1 lg:space-x-3 text-sm font-medium text-slate-300">
+              <button
+                onClick={() => scrollToSection('how-it-works')}
+                className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
+              >
+                Come funziona
+              </button>
+              <button
+                onClick={() => scrollToSection('demo-section')}
+                className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition flex items-center gap-1.5"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+                <span>Demo</span>
+              </button>
+              <button
+                onClick={() => scrollToSection('case-studies')}
+                className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
+              >
+                Casi reali
+              </button>
+              <button
+                onClick={() => scrollToSection('faq')}
+                className="px-3 py-1.5 rounded-md hover:text-white hover:bg-slate-800/60 transition"
+              >
+                FAQ
+              </button>
+            </nav>
+          ) : (
+            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400">
+              <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+              <span>228+ Esperienze 3D attive nel mondo</span>
+            </div>
+          )}
 
           {/* Primary Action Button */}
           <div className="hidden sm:flex items-center gap-3">
@@ -120,7 +192,48 @@ export const Header: React.FC<HeaderProps> = ({
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 pt-2 pb-6 space-y-3">
-          <div className="flex flex-col space-y-1 text-sm font-medium text-slate-200 pt-2">
+          {/* Style Switcher on Mobile */}
+          {onChangeLandingStyle && (
+            <div className="pt-2 pb-2">
+              <div className="text-[11px] uppercase tracking-wider text-slate-400 font-semibold mb-1.5 px-1">
+                Stile Grafico Landing:
+              </div>
+              <div className="grid grid-cols-2 gap-2 bg-slate-950 p-1.5 rounded-xl border border-slate-800">
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChangeLandingStyle('direct_response');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`py-2 px-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    landingStyle === 'direct_response'
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/60 shadow'
+                      : 'text-slate-400'
+                  }`}
+                >
+                  <Zap className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Direct Response</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onChangeLandingStyle('corporate');
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`py-2 px-2.5 rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    landingStyle === 'corporate'
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/60 shadow'
+                      : 'text-slate-400'
+                  }`}
+                >
+                  <Building2 className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>B2B Corporate</span>
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col space-y-1 text-sm font-medium text-slate-200 pt-2 border-t border-slate-800">
             <button
               onClick={() => scrollToSection('how-it-works')}
               className="text-left py-2.5 px-3 rounded hover:bg-slate-800 text-slate-300"

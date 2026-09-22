@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import { Layers, AlertTriangle, MapPinOff, Truck, ArrowRight, XCircle } from 'lucide-react';
 import { PROBLEMS_LIST } from '../data/campaignData';
 
@@ -27,7 +28,13 @@ export const ProblemSection: React.FC<ProblemSectionProps> = ({ onBookDemoClick 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
-        <div className="max-w-3xl mx-auto text-center mb-14">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto text-center mb-14"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-950/50 border border-rose-800/40 text-rose-400 text-xs font-semibold mb-3">
             <XCircle className="w-3.5 h-3.5" />
             <span>I Limiti Dei Media Tradizionali</span>
@@ -38,13 +45,18 @@ export const ProblemSection: React.FC<ProblemSectionProps> = ({ onBookDemoClick 
           <p className="mt-4 text-base text-slate-300 leading-relaxed">
             Se vendi prodotti complessi, gestisci linee industriali o organizzi trasferte in fiera, sai già che spiegare a parole non basta più. I canali statici frenano le tue opportunità commerciali.
           </p>
-        </div>
+        </motion.div>
 
         {/* Problems Grid (4 Blocks) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {PROBLEMS_LIST.map((item, index) => (
-            <div
+            <motion.div
               key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.45, delay: index * 0.08 }}
+              whileHover={{ y: -3, transition: { duration: 0.2 } }}
               className="rounded-xl bg-slate-900/70 border border-slate-800 p-6 md:p-7 hover:border-slate-700 transition flex flex-col justify-between"
             >
               <div>
@@ -72,25 +84,31 @@ export const ProblemSection: React.FC<ProblemSectionProps> = ({ onBookDemoClick 
                 </span>
                 <span className="text-slate-300">{item.consequence}</span>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Transition to Solution */}
-        <div className="mt-12 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-12 text-center"
+        >
           <div className="inline-flex flex-col sm:flex-row items-center gap-3 p-4 rounded-xl bg-slate-900/90 border border-slate-800">
             <span className="text-sm text-slate-300 font-medium">
               Riconosci una di queste situazioni nel tuo ciclo operativo?
             </span>
             <button
               onClick={onBookDemoClick}
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 hover:underline"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-cyan-300 hover:underline cursor-pointer"
             >
               <span>Parla con un esperto per risolverla</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

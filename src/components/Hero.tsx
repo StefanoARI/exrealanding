@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, Play, CheckCircle2, Rotate3d, Sparkles, ArrowRight, ShieldCheck, Zap } from 'lucide-react';
 import { CampaignData } from '../types';
 
@@ -51,7 +52,12 @@ export const Hero: React.FC<HeroProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
           {/* Left Column: Copy & CTAs */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="lg:col-span-7 space-y-6 text-left"
+          >
             {/* Eyebrow */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800/80 border border-slate-700/80 text-cyan-400 text-xs font-semibold tracking-wide">
               <Sparkles className="w-3.5 h-3.5" />
@@ -81,7 +87,7 @@ export const Hero: React.FC<HeroProps> = ({
               <button
                 onClick={onBookDemoClick}
                 id="hero-primary-cta"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg text-base font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 active:scale-[0.98] transition shadow-xl shadow-cyan-500/20 group"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-lg text-base font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 active:scale-[0.98] transition shadow-xl shadow-cyan-500/20 group cursor-pointer"
               >
                 <Calendar className="w-5 h-5 text-slate-950 group-hover:rotate-6 transition-transform" />
                 <span>{campaign.primaryCta}</span>
@@ -91,7 +97,7 @@ export const Hero: React.FC<HeroProps> = ({
               <button
                 onClick={onExploreDemoClick}
                 id="hero-secondary-cta"
-                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg text-sm font-semibold text-slate-200 bg-slate-800/90 hover:bg-slate-700 hover:text-white border border-slate-700 transition active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-lg text-sm font-semibold text-slate-200 bg-slate-800/90 hover:bg-slate-700 hover:text-white border border-slate-700 transition active:scale-[0.98] cursor-pointer"
               >
                 <Rotate3d className="w-4 h-4 text-cyan-400" />
                 <span>{campaign.secondaryCta}</span>
@@ -113,10 +119,15 @@ export const Hero: React.FC<HeroProps> = ({
                 <span>Funziona da web senza app</span>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Real Visual Demo Showcase */}
-          <div className="lg:col-span-5">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
+            className="lg:col-span-5"
+          >
             <div className="relative rounded-2xl bg-gradient-to-b from-slate-800/80 to-slate-900/90 p-2.5 border border-slate-700/80 shadow-2xl backdrop-blur">
               {/* Top Window Bar */}
               <div className="flex items-center justify-between px-3 py-2 border-b border-slate-800/80 mb-2.5">
@@ -133,11 +144,18 @@ export const Hero: React.FC<HeroProps> = ({
 
               {/* Visual Container */}
               <div className="relative rounded-xl overflow-hidden bg-slate-950 aspect-[16/10] group">
-                <img
-                  src={currentShowcase.image}
-                  alt={currentShowcase.title}
-                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={currentShowcase.image}
+                    src={currentShowcase.image}
+                    alt={currentShowcase.title}
+                    initial={{ opacity: 0, scale: 1.04 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                  />
+                </AnimatePresence>
                 
                 {/* Overlay Badge */}
                 <div className="absolute top-3 left-3 bg-slate-900/85 backdrop-blur px-2.5 py-1 rounded-md border border-slate-700 text-xs font-medium text-slate-200 flex items-center gap-1.5 shadow-lg">
@@ -149,7 +167,7 @@ export const Hero: React.FC<HeroProps> = ({
                 <div className="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <button
                     onClick={onExploreDemoClick}
-                    className="px-4 py-2 rounded-lg bg-cyan-400 text-slate-950 font-bold text-xs shadow-xl flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all"
+                    className="px-4 py-2 rounded-lg bg-cyan-400 text-slate-950 font-bold text-xs shadow-xl flex items-center gap-2 transform translate-y-2 group-hover:translate-y-0 transition-all cursor-pointer"
                   >
                     <Play className="w-3.5 h-3.5 fill-current" />
                     <span>Interagisci con la demo live</span>
@@ -169,7 +187,7 @@ export const Hero: React.FC<HeroProps> = ({
                   <button
                     key={item.title}
                     onClick={() => setActivePreviewIndex(idx)}
-                    className={`p-1.5 rounded-lg text-left transition border text-[11px] ${
+                    className={`p-1.5 rounded-lg text-left transition border text-[11px] cursor-pointer ${
                       activePreviewIndex === idx
                         ? 'bg-slate-800 border-cyan-500/80 text-white shadow-sm'
                         : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
@@ -180,9 +198,8 @@ export const Hero: React.FC<HeroProps> = ({
                   </button>
                 ))}
               </div>
-
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>

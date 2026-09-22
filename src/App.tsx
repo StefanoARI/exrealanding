@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { TrustBar } from './components/TrustBar';
@@ -11,6 +12,7 @@ import { WhyExreaSection } from './components/WhyExreaSection';
 import { HowItWorksSection } from './components/HowItWorksSection';
 import { FaqSection } from './components/FaqSection';
 import { FinalCtaAndForm } from './components/FinalCtaAndForm';
+import { DirectResponseLanding } from './components/DirectResponseLanding';
 import { ThankYouPage } from './components/ThankYouPage';
 import { StickyMobileCta } from './components/StickyMobileCta';
 import { CookieConsentBanner } from './components/CookieConsentBanner';
@@ -21,6 +23,9 @@ import { CampaignVertical, LeadFormData, TrackingEvent, UtmParameters } from './
 import { CAMPAIGN_VERTICALS } from './data/campaignData';
 
 export default function App() {
+  // Landing Graphic Style: default to previous corporate style as requested
+  const [landingStyle, setLandingStyle] = useState<'direct_response' | 'corporate'>('corporate');
+
   // Campaign Vertical State (Section 02)
   const [currentVertical, setCurrentVertical] = useState<CampaignVertical>('configuratori_3d');
   const [submittedLead, setSubmittedLead] = useState<LeadFormData | null>(null);
@@ -114,7 +119,8 @@ export default function App() {
 
   const scrollToBooking = () => {
     logEvent('cta_click', { action: 'book_demo_click' });
-    const form = document.getElementById('booking-form');
+    const targetId = landingStyle === 'direct_response' ? 'direct-booking-form' : 'booking-form';
+    const form = document.getElementById(targetId) || document.getElementById('booking-form') || document.getElementById('direct-booking-form');
     if (form) {
       const yOffset = -60;
       const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
@@ -163,83 +169,121 @@ export default function App() {
   const activeCampaign = CAMPAIGN_VERTICALS[currentVertical];
 
   return (
-    <div className="min-h-screen bg-[#0c0f17] text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
+    <div className="min-h-screen bg-[#08090d] text-slate-100 flex flex-col font-sans selection:bg-cyan-500 selection:text-white">
       
-      {/* 01 HEADER */}
+      {/* 01 HEADER WITH GRAPHIC STYLE SELECTOR */}
       <Header
         currentVertical={currentVertical}
         onSelectVertical={handleSelectVertical}
         onBookDemoClick={scrollToBooking}
+        landingStyle={landingStyle}
+        onChangeLandingStyle={(style) => {
+          setLandingStyle(style);
+          logEvent('landing_style_switch', { style });
+        }}
       />
 
       {/* Main Content: If lead submitted, show Section 14 Thank You Page */}
-      {submittedLead ? (
-        <ThankYouPage
-          leadData={submittedLead}
-          onViewDemosClick={() => {
-            setSubmittedLead(null);
-            setTimeout(scrollToDemos, 100);
-          }}
-          onViewCaseStudiesClick={() => {
-            setSubmittedLead(null);
-            setTimeout(scrollToCaseStudies, 100);
-          }}
-          onReset={() => setSubmittedLead(null)}
-        />
-      ) : (
-        <main className="flex-grow">
-          {/* 02 HERO */}
-          <Hero
-            campaign={activeCampaign}
-            onBookDemoClick={scrollToBooking}
-            onExploreDemoClick={scrollToDemos}
-          />
+      <AnimatePresence mode="wait">
+        {submittedLead ? (
+          <motion.div
+            key="thank-you"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+          >
+            <ThankYouPage
+              leadData={submittedLead}
+              onViewDemosClick={() => {
+                setSubmittedLead(null);
+                setTimeout(scrollToDemos, 100);
+              }}
+              onViewCaseStudiesClick={() => {
+                setSubmittedLead(null);
+                setTimeout(scrollToCaseStudies, 100);
+              }}
+              onReset={() => setSubmittedLead(null)}
+            />
+          </motion.div>
+        ) : landingStyle === 'direct_response' ? (
+          /* Direct Response / Theory Style Requested from PDF */
+          <motion.main
+            key="direct-response"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="flex-grow"
+          >
+            <DirectResponseLanding
+              onBookDemoClick={scrollToBooking}
+              onSubmitLead={handleLeadSubmit}
+            />
+          </motion.main>
+        ) : (
+          /* Classic Corporate B2B Flow */
+          <motion.main
+            key="corporate-b2b"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="flex-grow"
+          >
+            {/* 02 HERO */}
+            <Hero
+              campaign={activeCampaign}
+              onBookDemoClick={scrollToBooking}
+              onExploreDemoClick={scrollToDemos}
+            />
 
-          {/* 03 TRUST IMMEDIATO */}
-          <TrustBar />
+            {/* 03 TRUST IMMEDIATO */}
+            <TrustBar />
 
-          {/* 04 IL PROBLEMA */}
-          <ProblemSection onBookDemoClick={scrollToBooking} />
+            {/* 04 IL PROBLEMA */}
+            <ProblemSection onBookDemoClick={scrollToBooking} />
 
-          {/* 05 LA SOLUZIONE */}
-          <SolutionSection onExploreDemoClick={scrollToDemos} />
+            {/* 05 LA SOLUZIONE */}
+            <SolutionSection onExploreDemoClick={scrollToDemos} />
 
-          {/* 06 DEMO INTERATTIVA */}
-          <DemoSection
-            onBookDemoClick={scrollToBooking}
-            onDemoInteracted={(demoId) => logEvent('demo_start', { demoId })}
-          />
+            {/* 06 DEMO INTERATTIVA */}
+            <DemoSection
+              onBookDemoClick={scrollToBooking}
+              onDemoInteracted={(demoId) => logEvent('demo_start', { demoId })}
+            />
 
-          {/* 07 BENEFICI */}
-          <BenefitsSection />
+            {/* 07 BENEFICI */}
+            <BenefitsSection />
 
-          {/* 08 CASI STUDIO (ASSOMAC, Podere Forte, VRCare) */}
-          <CaseStudiesSection onBookDemoClick={scrollToBooking} />
+            {/* 08 CASI STUDIO (ASSOMAC, Podere Forte, VRCare) */}
+            <CaseStudiesSection onBookDemoClick={scrollToBooking} />
 
-          {/* 09 PERCHÉ EXREA */}
-          <WhyExreaSection />
+            {/* 09 PERCHÉ EXREA */}
+            <WhyExreaSection />
 
-          {/* 10 COME FUNZIONA */}
-          <HowItWorksSection onBookDemoClick={scrollToBooking} />
+            {/* 10 COME FUNZIONA */}
+            <HowItWorksSection onBookDemoClick={scrollToBooking} />
 
-          {/* 11 FAQ */}
-          <FaqSection onBookDemoClick={scrollToBooking} />
+            {/* 11 FAQ */}
+            <FaqSection onBookDemoClick={scrollToBooking} />
 
-          {/* 12-13 CTA FINALE & FORM QUALIFICAZIONE */}
-          <FinalCtaAndForm
-            onSubmitLead={handleLeadSubmit}
-            defaultObjective={
-              currentVertical === 'formazione_vr'
-                ? 'Formare'
-                : currentVertical === 'esperienze_360_ar'
-                ? 'Far visitare'
-                : currentVertical === 'fiere_eventi'
-                ? 'Fiere ed Eventi'
-                : 'Vendere'
-            }
-          />
-        </main>
-      )}
+            {/* 12-13 CTA FINALE & FORM QUALIFICAZIONE */}
+            <FinalCtaAndForm
+              onSubmitLead={handleLeadSubmit}
+              defaultObjective={
+                currentVertical === 'formazione_vr'
+                  ? 'Formare'
+                  : currentVertical === 'esperienze_360_ar'
+                  ? 'Far visitare'
+                  : currentVertical === 'fiere_eventi'
+                  ? 'Fiere ed Eventi'
+                  : 'Vendere'
+              }
+            />
+          </motion.main>
+        )}
+      </AnimatePresence>
 
       {/* FOOTER */}
       <Footer />

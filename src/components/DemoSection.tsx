@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { Play, Rotate3d, Sparkles, CheckCircle, ExternalLink, Calendar, Maximize2, RefreshCw, Smartphone, Laptop } from 'lucide-react';
 import { DEMOS_LIST } from '../data/campaignData';
 import { DemoItem } from '../types';
@@ -32,7 +33,13 @@ export const DemoSection: React.FC<DemoSectionProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header with exact Brief Copy */}
-        <div className="max-w-3xl mx-auto text-center mb-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl mx-auto text-center mb-10"
+        >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/70 border border-cyan-800/60 text-cyan-400 text-xs font-semibold mb-3">
             <Rotate3d className="w-3.5 h-3.5" />
             <span>Esperienza Live Senza Download</span>
@@ -51,17 +58,23 @@ export const DemoSection: React.FC<DemoSectionProps> = ({
           <p className="mt-2 text-sm text-slate-400 max-w-xl mx-auto">
             Interagisci con i configuratori 3D e i contenuti immersivi realizzati con tecnologia EXREA direttamente dalla finestra qui sotto.
           </p>
-        </div>
+        </motion.div>
 
         {/* Demo Selector Tabs */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mb-6">
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, delay: 0.1 }}
+          className="flex flex-wrap items-center justify-center gap-2 mb-6"
+        >
           {DEMOS_LIST.map((demo) => {
             const isSelected = selectedDemo.id === demo.id;
             return (
               <button
                 key={demo.id}
                 onClick={() => handleSelectDemo(demo)}
-                className={`px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 border ${
+                className={`relative px-3.5 py-2 rounded-lg text-xs font-semibold transition-all flex items-center gap-2 border cursor-pointer ${
                   isSelected
                     ? 'bg-cyan-500/15 border-cyan-500 text-cyan-300 shadow-md shadow-cyan-950/40'
                     : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
@@ -74,10 +87,16 @@ export const DemoSection: React.FC<DemoSectionProps> = ({
               </button>
             );
           })}
-        </div>
+        </motion.div>
 
         {/* Interactive Showcase Container */}
-        <div className={`relative rounded-2xl bg-slate-900 border border-slate-700/80 shadow-2xl overflow-hidden ${isFullscreen ? 'fixed inset-4 z-50 bg-slate-950' : ''}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-50px' }}
+          transition={{ duration: 0.55, delay: 0.15 }}
+          className={`relative rounded-2xl bg-slate-900 border border-slate-700/80 shadow-2xl overflow-hidden ${isFullscreen ? 'fixed inset-4 z-50 bg-slate-950' : ''}`}
+        >
           
           {/* Top Bar */}
           <div className="flex flex-wrap items-center justify-between px-4 py-3 bg-slate-950 border-b border-slate-800 gap-2">
@@ -237,11 +256,16 @@ export const DemoSection: React.FC<DemoSectionProps> = ({
               </a>
             )}
           </div>
-        </div>
+        </motion.div>
 
-        {/* Section 06 Mandated Followup Banner:
-            "Vuoi capire come potrebbe funzionare per la tua azienda? → Prenota una demo" */}
-        <div className="mt-8 rounded-xl bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+        {/* Section 06 Mandated Followup Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mt-8 rounded-xl bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 border border-slate-800 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left"
+        >
           <div>
             <h4 className="text-base sm:text-lg font-bold text-white">
               Vuoi capire come potrebbe funzionare per la tua azienda?
@@ -253,12 +277,12 @@ export const DemoSection: React.FC<DemoSectionProps> = ({
 
           <button
             onClick={onBookDemoClick}
-            className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 active:scale-[0.98] transition shadow-lg shadow-cyan-500/20"
+            className="shrink-0 inline-flex items-center gap-2 px-5 py-3 rounded-lg text-sm font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 active:scale-[0.98] transition shadow-lg shadow-cyan-500/20 cursor-pointer"
           >
             <Calendar className="w-4 h-4" />
             <span>Prenota una demo gratuita</span>
           </button>
-        </div>
+        </motion.div>
 
       </div>
     </section>
