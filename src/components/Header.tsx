@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Calendar, Menu, X, ArrowRight, Sparkles, Zap, Building2 } from 'lucide-react';
 import { CampaignVertical } from '../types';
+import { smoothScrollTo, smoothScrollToElement } from '../utils/smoothScroll';
 
 interface HeaderProps {
   currentVertical?: CampaignVertical;
@@ -20,17 +21,12 @@ export const Header: React.FC<HeaderProps> = ({
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -80;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
+    smoothScrollToElement(id, -80, 1000);
   };
 
   const scrollToTop = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollTo(0, 950);
   };
 
   return (
@@ -72,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => {
                   onChangeLandingStyle('direct_response');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  smoothScrollTo(0, 850);
                 }}
                 className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-colors duration-200 ${
                   landingStyle === 'direct_response'
@@ -94,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => {
                   onChangeLandingStyle('corporate');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  smoothScrollTo(0, 850);
                 }}
                 className={`relative z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-colors duration-200 ${
                   landingStyle === 'corporate'

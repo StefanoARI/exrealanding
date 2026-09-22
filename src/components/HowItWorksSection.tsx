@@ -84,7 +84,7 @@ export const HowItWorksSection: React.FC<HowItWorksSectionProps> = ({ onBookDemo
         <div className="mt-12 text-center">
           <button
             onClick={onBookDemoClick}
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition shadow-lg shadow-cyan-950/40"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition shadow-lg shadow-cyan-950/40 cursor-pointer active:scale-[0.98]"
           >
             <span>Inizia dal passo 01: fissa i primi 20 minuti</span>
           </button>

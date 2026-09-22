@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, MessageSquare, Shield, ExternalLink } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageSquare, Shield, ExternalLink, ArrowUp } from 'lucide-react';
 import { PrivacyModal } from './CookieConsentBanner';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 export const Footer: React.FC = () => {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -13,11 +14,17 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand & Origin */}
           <div className="md:col-span-2 space-y-3 text-left">
             <div className="flex items-center gap-2">
-              <img
-                src="/images/exrea-logo.png"
-                alt="EXREA"
-                className="h-7 w-auto object-contain brightness-110"
-              />
+              <button
+                type="button"
+                onClick={() => smoothScrollTo(0, 950)}
+                className="cursor-pointer inline-block hover:opacity-80 transition-opacity text-left"
+              >
+                <img
+                  src="/images/exrea-logo.png"
+                  alt="EXREA"
+                  className="h-7 w-auto object-contain brightness-110"
+                />
+              </button>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-sm">
               EXREA S.r.l. è una startup innovativa specializzata in configuratori 3D real-time, realtà virtuale, realtà aumentata e video 360° per aziende, fiere ed enti.
@@ -86,9 +93,16 @@ export const Footer: React.FC = () => {
             </button>
             <button
               onClick={() => setShowPrivacyModal(true)}
-              className="text-slate-400 hover:text-cyan-400 transition underline"
+              className="text-slate-400 hover:text-cyan-400 transition underline cursor-pointer"
             >
               Cookie Policy
+            </button>
+            <button
+              onClick={() => smoothScrollTo(0, 1050)}
+              className="text-slate-400 hover:text-cyan-300 transition flex items-center gap-1 cursor-pointer"
+            >
+              <span>Torna in cima</span>
+              <ArrowUp className="w-3 h-3 text-cyan-400" />
             </button>
             <a
               href="https://www.exrea.it"

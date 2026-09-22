@@ -668,7 +668,7 @@ export const DirectResponseLanding: React.FC<DirectResponseLandingProps> = ({
           <div className="mt-8">
             <button
               onClick={onBookDemoClick}
-              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-black text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition shadow-xl shadow-cyan-500/25"
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl text-base font-black text-slate-950 bg-cyan-400 hover:bg-cyan-300 transition shadow-xl shadow-cyan-500/25 cursor-pointer active:scale-[0.98]"
             >
               <Calendar className="w-5 h-5" />
               <span>Candidati Adesso alla Sessione Gratuita</span>

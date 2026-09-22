@@ -11,7 +11,7 @@ export const StickyMobileCta: React.FC<StickyMobileCtaProps> = ({ onBookDemoClic
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const formElement = document.getElementById('booking-form');
+      const formElement = document.getElementById('booking-form') || document.getElementById('direct-booking-form');
       
       // If user has scrolled down past hero (e.g. 400px) but hasn't reached the form yet
       if (scrollY > 350) {

@@ -21,6 +21,7 @@ import { Footer } from './components/Footer';
 
 import { CampaignVertical, LeadFormData, TrackingEvent, UtmParameters } from './types';
 import { CAMPAIGN_VERTICALS } from './data/campaignData';
+import { smoothScrollToElement } from './utils/smoothScroll';
 
 export default function App() {
   // Landing Graphic Style: default to previous corporate style as requested
@@ -122,9 +123,7 @@ export default function App() {
     const targetId = landingStyle === 'direct_response' ? 'direct-booking-form' : 'booking-form';
     const form = document.getElementById(targetId) || document.getElementById('booking-form') || document.getElementById('direct-booking-form');
     if (form) {
-      const yOffset = -60;
-      const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      smoothScrollToElement(form, -75, 1000);
     }
   };
 
@@ -132,9 +131,7 @@ export default function App() {
     logEvent('cta_click', { action: 'explore_demos_click' });
     const section = document.getElementById('demo-section');
     if (section) {
-      const yOffset = -70;
-      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      smoothScrollToElement(section, -75, 1000);
     }
   };
 
@@ -142,9 +139,7 @@ export default function App() {
     logEvent('cta_click', { action: 'case_studies_click' });
     const section = document.getElementById('case-studies');
     if (section) {
-      const yOffset = -70;
-      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+      smoothScrollToElement(section, -75, 1000);
     }
   };
 
